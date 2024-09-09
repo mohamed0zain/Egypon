@@ -44,6 +44,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Register a new customer
+// Register a new customer
 app.post('/register-customer', [
   check('first_name').not().isEmpty(),
   check('last_name').not().isEmpty(),
@@ -81,7 +82,6 @@ app.post('/register-customer', [
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
-
 // Register a new company user
 app.post('/register-company', [
   check('company_name').not().isEmpty(),
@@ -120,7 +120,8 @@ app.post('/register-company', [
   }
 });
 
-// Customer login
+// -----------------Customer login---------------------
+
 app.post('/login-customer', [
   check('email').isEmail(),
   check('password').not().isEmpty()
@@ -130,12 +131,12 @@ app.post('/login-customer', [
   try {
     const [user] = await connection.query('SELECT * FROM customer WHERE email = ?', [email]);
     if (user.length === 0) {
-      return res.status(400).json({ error: 'Invalid email or password.' });
+      return res.status(400).json({ error: 'Invalid email' });
     }
 
     const validPassword = await bcrypt.compare(password, user[0].password);
     if (!validPassword) {
-      return res.status(400).json({ error: 'Invalid email or password.' });
+      return res.status(400).json({ error: 'Invalid password.' });
     }
 
     const token = jwt.sign({ id: user[0].id, email: user[0].email, type: 'customer' }, jwtSecret, { expiresIn: '1h' });
@@ -147,7 +148,8 @@ app.post('/login-customer', [
   }
 });
 
-// Company user logins
+// -----------------Company login---------------------
+
 app.post('/login-company', [
   check('email').isEmail(),
   check('password').not().isEmpty()
@@ -157,12 +159,12 @@ app.post('/login-company', [
   try {
     const [user] = await connection.query('SELECT * FROM company_users WHERE email = ?', [email]);
     if (user.length === 0) {
-      return res.status(400).json({ error: 'Invalid email or password.' });
+      return res.status(400).json({ error: 'Invalid email' });
     }
 
     const validPassword = await bcrypt.compare(password, user[0].password);
     if (!validPassword) {
-      return res.status(400).json({ error: 'Invalid email or password.' });
+      return res.status(400).json({ error: 'Invalid password.' });
     }
 
     const token = jwt.sign({ id: user[0].id, email: user[0].email, type: 'company_user' }, jwtSecret, { expiresIn: '1h' });
@@ -173,6 +175,22 @@ app.post('/login-company', [
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // User profile update
 app.put('/profile', authenticateToken, async (req, res) => {
@@ -205,7 +223,7 @@ app.put('/change-password', authenticateToken, [
     }
 
     const hashedPassword = await bcrypt.hash(new_password, 10);
-    await connection.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
+    await connection.query('UPDATE customers SET password = ? WHERE id = ?', [hashedPassword, userId]);
     
     res.json({ message: 'Password changed successfully.' });
   } catch (error) {
