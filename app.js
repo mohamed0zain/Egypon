@@ -10,6 +10,7 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
+
 const port = process.env.PORT || 3000;
 const jwtSecret = process.env.JWT_SECRET || '30b69b7f2ce9c95d68309b596185c35ac728327250c66d895a9d1cffe394019a';
 
