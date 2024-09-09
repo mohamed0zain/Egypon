@@ -21,7 +21,7 @@ const dbConfig = {
   database: process.env.DB_NAME || 'egypon'
 };
 
-let connection;
+let connection; 
 mysql.createConnection(dbConfig)
   .then(conn => {
     connection = conn;
