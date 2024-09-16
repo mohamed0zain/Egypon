@@ -1,21 +1,29 @@
 const mysql = require('mysql2/promise');
-
-let connection;
+require('dotenv').config();
 
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'egypon',
+  database: process.env.DB_NAME || 'yourdatabase'
 };
 
-const connectDB = async () => {
-  try {
+let connection;
+const connectToDB = async () => {
+  if (!connection) {
     connection = await mysql.createConnection(dbConfig);
     console.log('Database connected.');
-  } catch (err) {
-    console.error('Database connection failed:', err);
+  }
+  return connection;
+};
+
+const checkDBConnection = async () => {
+  try {
+    const conn = await connectToDB();
+    console.log('Database connection is successful.');
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
   }
 };
 
-module.exports = { connectDB, connection };
+module.exports = { connectToDB, checkDBConnection };
