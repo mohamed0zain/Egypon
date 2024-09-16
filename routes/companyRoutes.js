@@ -57,4 +57,39 @@ router.post('/register-company', [
   }
 });
 
+router.post('/login-company', [
+  check('email').isEmail().withMessage('Must provide a valid email address.'),
+  check('password').not().isEmpty().withMessage('Password is required.')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    const connection = await connectToDB();
+
+    // Check if email exists
+    const [user] = await connection.query('SELECT * FROM company_users WHERE email = ?', [email]);
+    if (user.length === 0) {
+      return res.status(400).json({ error: 'Invalid email or password.' });
+    }
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user[0].password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid email or password.' });
+    }
+
+    // Create JWT token
+    const token = jwt.sign({ email, type: 'company' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ message: 'Login successful.', token });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
 module.exports = router;
