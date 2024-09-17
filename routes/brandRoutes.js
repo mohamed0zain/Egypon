@@ -38,7 +38,7 @@ router.post('/add-brand', async (req, res) => {
 
         res.status(201).json({
             message: 'Brand added successfully',
-            brandId: newBrandId
+            
         });
     } catch (error) {
         console.error(error);
