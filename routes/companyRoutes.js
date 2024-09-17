@@ -6,6 +6,8 @@ const connectToDB = require('../config/db'); // Adjust path if necessary
 
 const router = express.Router();
 
+
+//register to a company
 router.post('/register-company', [
   check('company_name').not().isEmpty().isLength({ max: 50 }).withMessage('Company name must be less than 50 characters.'),
   check('company_mobile_phone').not().isEmpty().isNumeric().withMessage('Company mobile phone must be a valid number.'),
@@ -56,7 +58,7 @@ router.post('/register-company', [
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
-
+//log in to a company
 router.post('/login-company', [
   check('email').isEmail().withMessage('Must provide a valid email address.'),
   check('password').not().isEmpty().withMessage('Password is required.')
