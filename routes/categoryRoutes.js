@@ -145,6 +145,15 @@ router.delete('/delete-category', async (req, res) => {
     }
 });
 
-module.exports = router;
+router.get('/categories', async (req, res) => {
+    try {
+        const pool = await connectToDB();
+        const [rows] = await pool.query('SELECT id, name FROM categories');
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
 
+});
 module.exports = router;
