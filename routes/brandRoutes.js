@@ -140,4 +140,15 @@ router.delete('/delete-brand', async (req, res) => {
     }
 });
 
+
+router.get('/brands', async (req, res) => {
+    try {
+        const pool = await connectToDB();
+        const [rows] = await pool.query('SELECT id, name FROM brands');
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 module.exports = router;
