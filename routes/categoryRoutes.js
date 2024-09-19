@@ -105,8 +105,8 @@ router.put('/update-category', async (req, res) => {
 
 
 // Delete an existing category
-router.delete('/delete-category', async (req, res) => {
-    const { id } = req.body;
+router.delete('/delete-category/:id', async (req, res) => {
+    const { id } = req.params;
 
     if (!id) {
         return res.status(400).json({ error: 'Category ID is required' });
@@ -144,6 +144,7 @@ router.delete('/delete-category', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 router.get('/categories', async (req, res) => {
     try {
