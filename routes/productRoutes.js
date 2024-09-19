@@ -10,12 +10,21 @@ const path = require('path');
 
 
 // Set up multer for file uploads
-const storage = multer.memoryStorage(); // Store the image in memory (or configure for disk storage)
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Specify the directory for saving images
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname)); // Use a unique filename
+    }
+});
 const upload = multer({ storage: storage });
+
 
 router.post('/add-product', upload.single('main_image'), async (req, res) => {
     const { name, description, price, category_id, brand_id, product_condition, discount } = req.body;
-    const main_image = req.file; // Access the uploaded image
+    const main_image = req.file ? req.file.filename : null; // Get the filename of the uploaded image
 
     if (!name || !description || !price || !category_id || !brand_id) {
         return res.status(400).json({ error: 'Name, description, price, category_id, and brand_id are required' });
@@ -41,17 +50,11 @@ router.post('/add-product', upload.single('main_image'), async (req, res) => {
             return res.status(400).json({ error: 'Product with this name already exists' });
         }
 
-        // Handle image if provided
-        let imageBuffer = null;
-        if (main_image) {
-            imageBuffer = main_image.buffer; // You can also save the file using `fs` if you prefer to store it on disk
-        }
-
         // Insert new product
         const [result] = await pool.query(
             `INSERT INTO products (name, description, price, category_id, brand_id, product_condition, discount, main_image, created_at, updated_at) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [name, description, price, category_id, brand_id, product_condition, discount || null, imageBuffer || null, new Date(), new Date()]
+            [name, description, price, category_id, brand_id, product_condition, discount || null, main_image || null, new Date(), new Date()]
         );
 
         res.status(201).json({
@@ -63,6 +66,7 @@ router.post('/add-product', upload.single('main_image'), async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 router.put('/update-product/:id', upload.single('main_image'), async (req, res) => {
     const productId = req.params.id;
@@ -146,6 +150,7 @@ router.put('/update-product/:id', upload.single('main_image'), async (req, res) 
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 
 //delete product
