@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2024 at 04:10 PM
+-- Generation Time: Sep 19, 2024 at 01:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,6 +48,14 @@ CREATE TABLE `brands` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `brands`
+--
+
+INSERT INTO `brands` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(2, 'New Brand Nam1e', '2024-09-17 18:16:33', '2024-09-17 19:34:38'),
+(3, 'BrandName', '2024-09-17 20:35:36', '2024-09-17 20:35:36');
+
 -- --------------------------------------------------------
 
 --
@@ -55,28 +63,23 @@ CREATE TABLE `brands` (
 --
 
 CREATE TABLE `cart` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `total_price` decimal(10,2) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cart_items`
---
-
-CREATE TABLE `cart_items` (
-  `id` int(11) NOT NULL,
-  `cart_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
+  `cart_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `total_quantity` int(11) DEFAULT 0,
+  `total_price` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`cart_id`, `user_id`, `product_id`, `quantity`, `created_at`, `updated_at`, `total_quantity`, `total_price`) VALUES
+(11, 10, 5, 2, '2024-09-18 21:17:54', '2024-09-18 21:48:58', 4, 1059.98),
+(13, 10, 3, 2, '2024-09-18 21:47:18', '2024-09-18 21:48:58', 4, 1059.98);
 
 -- --------------------------------------------------------
 
@@ -90,6 +93,13 @@ CREATE TABLE `categories` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(2, 'Electronics', '2024-09-17 20:35:38', '2024-09-17 20:35:38');
 
 -- --------------------------------------------------------
 
@@ -121,7 +131,10 @@ CREATE TABLE `company_users` (
 
 INSERT INTO `company_users` (`id`, `company_name`, `company_mobile_phone`, `company_land_number`, `email`, `password`, `token`, `commercial_register_number`, `tax_card_number`, `created_at`, `updated_at`, `account_status`, `address`, `country`, `city`) VALUES
 (1, 'Elfahd electronics', '02335252', '4454545', 'mohamedzain235@gmail.com', '$2b$10$IFuJ3sfPsphXSPC9ESZJYeN3CgbmwJ/4yiVwO/pGHLTxgEH4dcUJG', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaGFtZWR6YWluMjM1QGdtYWlsLmNvbSIsInR5cGUiOiJjb21wYW55X3VzZXIiLCJpYXQiOjE3MjI5NTAyMDIsImV4cCI6MTcyMjk1MzgwMn0.SeAV_Ar-lYsztrtINl_Ml3PMqJ5EeZrwmGJvfe2CmEU', '123', '15', '2024-08-06 16:16:42', '2024-08-06 16:16:42', 'pending', '283H', 'Egypt', 'giza'),
-(2, 'mohamed', '15', '16', 'mohamedzain@gmail.com', '$2b$10$O2pElOUayy.ESAXZataCmewff8YOBnQ/zIU1Ye3CfJAtXIZmQ25qO', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtb2hhbWVkemFpbkBnbWFpbC5jb20iLCJ0eXBlIjoiY29tcGFueV91c2VyIiwiaWF0IjoxNzIzNjY4NjU2LCJleHAiOjE3MjM2NzIyNTZ9.OT90k-vmG0A0PbHwAKzTYqZdLr_VS5b_9Q5_XMuJX2o', '01005615476', '12345678', '2024-08-14 23:42:58', '2024-08-14 23:50:56', 'pending', '02333902326', '283H', 'giza');
+(2, 'mohamed', '15', '16', 'mohamedzain@gmail.com', '$2b$10$O2pElOUayy.ESAXZataCmewff8YOBnQ/zIU1Ye3CfJAtXIZmQ25qO', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtb2hhbWVkemFpbkBnbWFpbC5jb20iLCJ0eXBlIjoiY29tcGFueV91c2VyIiwiaWF0IjoxNzIzNjY4NjU2LCJleHAiOjE3MjM2NzIyNTZ9.OT90k-vmG0A0PbHwAKzTYqZdLr_VS5b_9Q5_XMuJX2o', '01005615476', '12345678', '2024-08-14 23:42:58', '2024-08-14 23:50:56', 'pending', '02333902326', '283H', 'giza'),
+(3, 'Egypon Solutions', '0123456789', '0223456789', 'info@egypon.com', '$2b$10$irqiw/YX5DjN5TZKNJkVje0rH6gAZ3ueNIrR/rT/5q9lKOFLAbLTC', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZm9AZWd5cG9uLmNvbSIsInR5cGUiOiJjb21wYW55IiwiaWF0IjoxNzI1OTExMDgzLCJleHAiOjE3MjU5MTQ2ODN9.jIPOw7riCcY-pNpDQD9608JPoHlF9fIXMc9jR2Ff1fA', '123456789012345', '987654321012345', '2024-09-09 22:44:43', '2024-09-09 22:44:43', 'pending', '123 Business Street, Industrial Area', 'Egypt', 'Cairo'),
+(4, 'Egypon Solutions', '0123456789', '0223456789', 'inf11o@egypon.com', '$2b$10$cX2ws1nYYItggvtMI9ElH.Z68UClQd1laLI9YjvVDbuZoRqM8NGvK', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImluZjExb0BlZ3lwb24uY29tIiwidHlwZSI6ImNvbXBhbnkiLCJpYXQiOjE3MjU5MTEyMTIsImV4cCI6MTcyNTkxNDgxMn0.ZUrI0G8nrdf334cGzIbtavgY2VxBxxbMOIzZSBPYbck', '12434567812345', '987653221012345', '2024-09-09 22:46:52', '2024-09-09 22:46:52', 'pending', '123 Business Street, Industrial Area', 'Egypt', 'Cairo'),
+(5, 'Tech Innovations', '1234567890', '0987654321', 'contact@techinnovations.com', '$2b$10$5JuT4dpGdqTCSypjaS/AXOKV6mU8Cr10dmQOtyhFvPYLHQj2Ao2pa', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbnRhY3RAdGVjaGlubm92YXRpb25zLmNvbSIsInR5cGUiOiJjb21wYW55IiwiaWF0IjoxNzI2NTA0MTAxLCJleHAiOjE3MjY1MDc3MDF9.pXw18zKkKx0JRSamYLRrHh20HY92KtpkWrwnq2EtUFw', '123452323689045', '543210987654321', '2024-09-16 19:28:21', '2024-09-16 19:28:21', 'pending', '123 Tech Lane', 'Techland', 'Techville');
 
 -- --------------------------------------------------------
 
@@ -137,7 +150,7 @@ CREATE TABLE `customer` (
   `gender` enum('Male','Female') NOT NULL,
   `email` varchar(255) NOT NULL,
   `mobile_number` varchar(20) NOT NULL,
-  `line_number` varchar(20) NOT NULL,
+  `line_number` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `country` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
@@ -153,7 +166,10 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`id`, `first_name`, `last_name`, `display_name`, `gender`, `email`, `mobile_number`, `line_number`, `address`, `country`, `city`, `password`, `token`, `created_at`, `updated_at`) VALUES
 (2, 'mohamed', 'zain', 'mohamed eltaher', 'Male', 'mohamedzain23@gmail.com', '01005615476', '02333902326', '283H', 'Egypt', 'giza', '$2b$10$O4sm5YoodKrr/eNus6LwxO.COqk1W8kkmWep1nS5rRzJi8ys0w.tq', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtb2hhbWVkemFpbjIzQGdtYWlsLmNvbSIsInR5cGUiOiJjdXN0b21lciIsImlhdCI6MTcyMzY2ODQyOCwiZXhwIjoxNzIzNjcyMDI4fQ._FZFx2boXvg7AcKeDXSo_fNC97owNugqu4a8Go4vnFo', '2024-08-14 23:38:40', '2024-08-14 23:47:08'),
-(3, 'mohamed', 'zain', 'mohamed eltaher', 'Male', 'mohamedza@gmail.com', '01005615476', '02333902326', '283H', 'Egypt', 'giza', '$2b$10$6VSh9dsVgS4aNWdvNRMIz.LhowPr67EGLxqDW3TRFH5CjyTKSZ7su', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaGFtZWR6YUBnbWFpbC5jb20iLCJ0eXBlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MjQxMDY4MDYsImV4cCI6MTcyNDExMDQwNn0.W031K-QOde7S5qU9SVGdM5y1gC3GDFF0-otpHoZzbZ4', '2024-08-20 01:33:26', '2024-08-20 01:33:26');
+(3, 'mohamed', 'zain', 'mohamed eltaher', 'Male', 'mohamedza@gmail.com', '01005615476', '02333902326', '283H', 'Egypt', 'giza', '$2b$10$6VSh9dsVgS4aNWdvNRMIz.LhowPr67EGLxqDW3TRFH5CjyTKSZ7su', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaGFtZWR6YUBnbWFpbC5jb20iLCJ0eXBlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MjQxMDY4MDYsImV4cCI6MTcyNDExMDQwNn0.W031K-QOde7S5qU9SVGdM5y1gC3GDFF0-otpHoZzbZ4', '2024-08-20 01:33:26', '2024-08-20 01:33:26'),
+(15, 'Hazem', 'Hamdy', 'Hazem', 'Male', 'Hazem_hamdy2adf35@gmail.com', '0115531277405', '23339023261', '2833H', 'Egypt', 'giza', '$2b$10$oWbm7iza5BqfsVAHZ6kkNeSJ2hys1JbLKUfv0dwQW.R6PCLkhGOhy', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkhhemVtX2hhbWR5MmFkZjM1QGdtYWlsLmNvbSIsInR5cGUiOiJjdXN0b21lciIsImlhdCI6MTcyNTkwNzU0NCwiZXhwIjoxNzI1OTExMTQ0fQ.JXKpDC84IPa47Vo1ZYipVkxxeKFITNN41X2Yhev_x-4', '2024-09-09 21:45:44', '2024-09-09 21:45:44'),
+(16, 'Hazem', 'Hamdy', 'Hazem', 'Male', 'Hazem_hamdy2addf35@gmail.com', '0115531277405', '23339023261', '2833H', 'Egypt', 'giza', '$2b$10$Ry.avyQcshPDZ96hYeyyLeTprjRIOupaMPFfyCFBK72FiP5m4GoBK', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkhhemVtX2hhbWR5MmFkZGYzNUBnbWFpbC5jb20iLCJ0eXBlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MjU5MDk3MTIsImV4cCI6MTcyNTkxMzMxMn0._ghwpvCR3DtTw8IZske5aIp5z-DuWb55RmTC-kMsm6c', '2024-09-09 22:21:52', '2024-09-09 22:21:52'),
+(17, 'Hazem', 'Hamdy', 'Hazem', 'Male', 'Hazem_hamdy2dddf35@gmail.com', '0115531277405', '23339023261', '2833H', 'Egypt', 'giza', '$2b$10$U.HbqQnl2d5sjz/S/cmou.63NyF8.JoP1GOJTLY1FiJ1FfE0WQKLa', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkhhemVtX2hhbWR5MmRkZGYzNUBnbWFpbC5jb20iLCJ0eXBlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MjU5MDk3MjIsImV4cCI6MTcyNTkxMzMyMn0.3d4vqMBoEqOOEFDvpIRuw0laV_Q22o_XzywAIylJ_yk', '2024-09-09 22:22:02', '2024-09-09 22:22:02');
 
 -- --------------------------------------------------------
 
@@ -230,12 +246,22 @@ CREATE TABLE `products` (
   `description` text DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `discount` decimal(5,2) DEFAULT 0.00,
-  `is_new` tinyint(1) DEFAULT 0,
-  `is_used` tinyint(1) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `main_image` varchar(255) DEFAULT NULL
+  `main_image` varchar(255) DEFAULT NULL,
+  `product_condition` enum('new','used') DEFAULT 'new'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `brand_id`, `category_id`, `description`, `price`, `discount`, `created_at`, `updated_at`, `main_image`, `product_condition`) VALUES
+(2, 'Example Product', 2, 2, 'This is an example description for the product.', 29.99, 0.00, '2024-09-17 20:36:00', '2024-09-17 20:36:00', NULL, 'new'),
+(3, 'Example Product', 2, 2, 'This is an example description for the product.', 29.99, 0.00, '2024-09-17 20:36:01', '2024-09-17 20:36:01', NULL, 'new'),
+(4, 'Example Product1', 2, 2, 'This is an example product description.', 199.99, 10.00, '2024-09-17 21:43:21', '2024-09-17 21:43:21', NULL, 'new'),
+(5, 'lol', 2, 2, 'product descriptoin', 500.00, 3.00, '2024-09-18 01:22:50', '2024-09-18 01:40:54', '????\0JFIF\0\0\0\0\0\0??\0C\0\n\n\n		\n\Z%\Z# , #&\')*)-0-(0%()(??\0C\n\n\n\n(\Z\Z((((((((((((((((((((((((((((((((((((((((((((((((((??\0??\"\0??\0\0\0\0\0\0\0\0\0\0\0\0\0??\0\0\0\0\0\0\0\0\0\0\0\0??\0\0\0\0??\0\0\0\0\0', 'used'),
+(6, 'product name1134', 2, 2, 'product descriptoin', 500.00, 22.00, '2024-09-18 01:30:14', '2024-09-18 01:30:14', '????\0JFIF\0\0\0\0\0\0??\0C\0\n\n\n		\n\Z%\Z# , #&\')*)-0-(0%()(??\0C\n\n\n\n(\Z\Z((((((((((((((((((((((((((((((((((((((((((((((((((??\0??\"\0??\0\0\0\0\0\0\0\0\0\0\0\0\0??\0\0\0\0\0\0\0\0\0\0\0\0??\0\0\0\0??\0\0\0\0\0', 'used');
 
 --
 -- Indexes for dumped tables
@@ -257,15 +283,7 @@ ALTER TABLE `brands`
 -- Indexes for table `cart`
 --
 ALTER TABLE `cart`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `cart_items`
---
-ALTER TABLE `cart_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cart_id` (`cart_id`),
+  ADD PRIMARY KEY (`cart_id`),
   ADD KEY `product_id` (`product_id`);
 
 --
@@ -338,37 +356,31 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `cart_items`
---
-ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `company_users`
 --
 ALTER TABLE `company_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `favorites`
@@ -398,7 +410,7 @@ ALTER TABLE `productimages`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -408,16 +420,7 @@ ALTER TABLE `products`
 -- Constraints for table `cart`
 --
 ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `customer` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`id`) REFERENCES `company_users` (`id`),
-  ADD CONSTRAINT `cart_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `company_users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Constraints for table `cart_items`
---
-ALTER TABLE `cart_items`
-  ADD CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `favorites`
