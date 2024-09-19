@@ -99,9 +99,10 @@ router.put('/update-brand', async (req, res) => {
     }
 });
 
-//delete brand
-router.delete('/delete-brand', async (req, res) => {
-    const { id } = req.body;
+
+// Delete an existing brand
+router.delete('/delete-brand/:id', async (req, res) => {
+    const { id } = req.params;
 
     if (!id) {
         return res.status(400).json({ error: 'Brand ID is required' });
